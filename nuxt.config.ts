@@ -4,4 +4,5 @@ export default defineNuxtConfig({
     transpile: ["gsap"],
   },
   modules: ["@pinia/nuxt"],
+  ssr: false,
 });
