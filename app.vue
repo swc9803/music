@@ -8,38 +8,25 @@
         <p>뒤</p>
       </div>
     </div>
-    <transition name="clock-fade">
-      <div class="clock">
-        <p>{{ month }}</p>
-        <p>{{ day }}</p>
-        <p>{{ hours }}</p>
-        <p>{{ minutes }}</p>
+    <div class="clock">
+      <p>{{ month }}</p>
+      <p>{{ day }}</p>
+      <p>{{ hours }}</p>
+      <p>{{ minutes }}</p>
+      <transition name="fade" mode="out-in">
         <p>{{ seconds }}</p>
-        <p>({{ weekDay }})</p>
-        <p>{{ ampm }}</p>
-      </div>
-    </transition>
+      </transition>
+      <p>{{ weekDay }}</p>
+      <p>{{ ampm }}</p>
+    </div>
   </div>
 </template>
 
 <script setup>
 import gsap from "gsap";
+import { useCurrentTime } from "../composables/useCurrentTime.js";
 
-const date = ref(new Date());
-const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
-const month = computed(() =>
-  (date.value.getMonth() + 1).toString().padStart(2, "0"),
-);
-const day = computed(() => date.value.getDate().toString().padStart(2, "0"));
-const hours = computed(() => date.value.getHours().toString().padStart(2, "0"));
-const minutes = computed(() =>
-  date.value.getMinutes().toString().padStart(2, "0"),
-);
-const seconds = computed(() =>
-  date.value.getSeconds().toString().padStart(2, "0"),
-);
-const weekDay = computed(() => weekDays[date.value.getDay()]);
-const ampm = computed(() => (date.value.getHours() >= 12 ? "PM" : "AM"));
+const { month, day, hours, minutes, seconds, weekDay, ampm } = useCurrentTime();
 
 const cardFrontRef = ref();
 const cardBackRef = ref();
@@ -65,10 +52,6 @@ const onResize = () => {
 };
 
 onMounted(() => {
-  setInterval(() => {
-    date.value = new Date();
-  }, 1000);
-
   onResize();
   window.addEventListener("resize", onResize);
 });
@@ -113,13 +96,12 @@ onMounted(() => {
   }
 }
 
-.clock-fade-enter-active,
-.clock-fade-leave-active {
-  transition: all 0.5s ease;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
-.clock-fade-enter-from,
-.clock-fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
-  transform: translateX(30px);
 }
 </style>
