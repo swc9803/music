@@ -2,22 +2,33 @@
   <div class="container">
     <div class="card" @click="flipCard">
       <div ref="cardFrontRef" class="card-front">
-        <p>앞</p>
+        <iframe
+          class="youtube"
+          src="https://www.youtube.com/embed/l7DQrZZ0o4U?si=D5pn77eC1iF_86Qz"
+        />
+        <!-- nocookie -->
+        <p>유튜브 재생 progress bar</p>
       </div>
       <div ref="cardBackRef" class="card-back">
         <p>뒤</p>
       </div>
     </div>
     <div class="clock">
-      <p>{{ month }}</p>
-      <p>{{ day }}</p>
-      <p>{{ hours }}</p>
-      <p>{{ minutes }}</p>
-      <transition name="fade" mode="out-in">
+      <div class="time">
+        <p>{{ hours }}</p>
+        <p>:</p>
+        <p>{{ minutes }}</p>
+        <p>:</p>
         <p>{{ seconds }}</p>
-      </transition>
-      <p>{{ weekDay }}</p>
-      <p>{{ ampm }}</p>
+        <p class="ampm">{{ ampm }}</p>
+      </div>
+      <div class="day">
+        <p>{{ weekDay }},</p>
+        <p>{{ month }}</p>
+        <p>/</p>
+        <p>{{ day }}</p>
+      </div>
+      <div class="toggle-light" />
     </div>
   </div>
 </template>
@@ -77,7 +88,6 @@ onMounted(() => {
       position: absolute;
       width: 100%;
       height: 100%;
-      box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
       backface-visibility: hidden;
     }
     &-front {
@@ -87,12 +97,46 @@ onMounted(() => {
       transform: rotateY(180deg);
       background: rgb(231, 169, 169);
     }
+    .youtube {
+      width: 90%;
+      height: 90%;
+      border: none;
+    }
   }
   .clock {
     flex: 0.45;
-    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 50%;
     background: rgb(255, 243, 243);
+    .time {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 5px;
+      font-size: 2em;
+      font-weight: 600;
+      .ampm {
+        font-size: 0.5em;
+      }
+    }
+    .day {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+    .toggle-light {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 60px;
+      height: 30px;
+      border-radius: 50px;
+      background: black;
+      cursor: pointer;
+    }
   }
 }
 
