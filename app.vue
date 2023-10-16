@@ -2,10 +2,10 @@
   <div class="container">
     <div class="card" @click="flipCard">
       <div ref="cardFrontRef" class="card-front">
-        <iframe
+        <!-- <iframe
           class="youtube"
           src="https://www.youtube.com/embed/l7DQrZZ0o4U?si=D5pn77eC1iF_86Qz"
-        />
+        /> -->
         <!-- nocookie -->
         <p>유튜브 재생 progress bar</p>
       </div>
@@ -13,22 +13,22 @@
         <p>뒤</p>
       </div>
     </div>
-    <div class="clock">
+    <div ref="clockRef" class="clock">
       <div class="time">
-        <p>{{ hours }}</p>
-        <p>:</p>
-        <p>{{ minutes }}</p>
-        <p>:</p>
-        <p>{{ seconds }}</p>
-        <p class="ampm">{{ ampm }}</p>
+        <p ref="timeRef1">{{ hours }}</p>
+        <p ref="timeRef2">:</p>
+        <p ref="timeRef3">{{ minutes }}</p>
+        <p ref="timeRef4">:</p>
+        <p ref="timeRef5">{{ seconds }}</p>
+        <p ref="timeRef6" class="ampm">{{ ampm }}</p>
       </div>
       <div class="day">
-        <p>{{ weekDay }},</p>
-        <p>{{ month }}</p>
-        <p>/</p>
-        <p>{{ day }}</p>
+        <p ref="timeRef7">{{ weekDay }},</p>
+        <p ref="timeRef8">{{ month }}</p>
+        <p ref="timeRef9">/</p>
+        <p ref="timeRef10">{{ day }}</p>
       </div>
-      <div class="toggle-light" />
+      <div ref="toggleRef" class="toggle-theme" @click="toggleTheme" />
     </div>
   </div>
 </template>
@@ -57,12 +57,75 @@ const flipCard = () => {
   }
 };
 
+const toggleRef = ref();
+const clockRef = ref();
+const timeRef1 = ref();
+const timeRef2 = ref();
+const timeRef3 = ref();
+const timeRef4 = ref();
+const timeRef5 = ref();
+const timeRef6 = ref();
+const timeRef7 = ref();
+const timeRef8 = ref();
+const timeRef9 = ref();
+const timeRef10 = ref();
+const themeTimeline = gsap.timeline({ paused: true });
+
+const theme = ref(false);
+const toggleTheme = () => {
+  theme.value = !theme.value;
+  if (theme.value) {
+    themeTimeline.play();
+  } else {
+    themeTimeline.reverse();
+  }
+};
+
 const onResize = () => {
   const vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty("--vh", `${vh}px`);
 };
 
 onMounted(() => {
+  themeTimeline.to(
+    toggleRef.value,
+    {
+      background: "#ffffff",
+      duration: 0.2,
+      ease: "none",
+    },
+    "<",
+  );
+  themeTimeline.to(
+    clockRef.value,
+    {
+      background: "#000000",
+      duration: 0.2,
+      ease: "none",
+    },
+    "<",
+  );
+  themeTimeline.to(
+    [
+      timeRef1.value,
+      timeRef2.value,
+      timeRef3.value,
+      timeRef4.value,
+      timeRef5.value,
+      timeRef6.value,
+      timeRef7.value,
+      timeRef8.value,
+      timeRef9.value,
+      timeRef10.value,
+    ],
+    {
+      color: "#ffffff",
+      duration: 0.2,
+      ease: "none",
+    },
+    "<",
+  );
+
   onResize();
   window.addEventListener("resize", onResize);
 });
@@ -110,7 +173,7 @@ onMounted(() => {
     flex-direction: column;
     justify-content: center;
     height: 50%;
-    background: rgb(255, 243, 243);
+    background: rgb(255, 255, 255);
     .time {
       display: flex;
       justify-content: center;
@@ -127,12 +190,13 @@ onMounted(() => {
       justify-content: center;
       gap: 5px;
     }
-    .toggle-light {
+    .toggle-theme {
       position: absolute;
       bottom: 10px;
       right: 10px;
       width: 60px;
       height: 30px;
+      border: 1px solid gray;
       border-radius: 50px;
       background: black;
       cursor: pointer;
