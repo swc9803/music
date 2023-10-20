@@ -1,6 +1,14 @@
 export const useCurrentTime = () => {
   const currentTime = ref(new Date());
-  const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  const weekDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   const weekDay = computed(() => weekDays[currentTime.value.getDay()]);
   const month = computed(() =>
